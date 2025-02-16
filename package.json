@@ -1,7 +1,7 @@
 {
   "name": "tunag-draft-creator",
   "scripts": {
-    "dev": "wrangler dev",
+    "dev": "wrangler dev --remote",
     "deploy": "wrangler deploy --minify",
     "lint": "biome lint --write .",
     "format": "biome format --write ."
