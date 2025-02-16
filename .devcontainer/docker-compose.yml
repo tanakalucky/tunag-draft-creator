@@ -1,0 +1,13 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ../:/app
+    tty: true
+    image: tunag-draft-creator
+    container_name: tunag-draft-creator-container
+    environment:
+      TZ: 'Asia/Tokyo'
+    network_mode: 'host'
