@@ -10,17 +10,17 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-app.get('/', async (c) => {
-  const browser = await puppeteer.launch(c.env.MYBROWSER);
+async function createDraft(env: Bindings) {
+  const browser = await puppeteer.launch(env.MYBROWSER);
 
   try {
     const page = await browser.newPage();
-    await page.goto(c.env.TUNAG_URL);
+    await page.goto(env.TUNAG_URL);
 
-    await page.locator('#user_login_id').fill(c.env.LOGIN_ID);
+    await page.locator('#user_login_id').fill(env.LOGIN_ID);
     await page.locator('#new_user > div > div.login__scene.js-scene1 > div.column-buttons.m-t30 > input').click();
 
-    await page.locator('#user_password').fill(c.env.LOGIN_PASSWORD);
+    await page.locator('#user_password').fill(env.LOGIN_PASSWORD);
     await page
       .locator('#new_user > div > div.login__scene.js-scene2.animated.fadeInRight > div.column-buttons.m-t30 > input')
       .click();
@@ -38,10 +38,17 @@ app.get('/', async (c) => {
       .locator('#edit_report_25239289 > div > input.btn.btn--sub.btn--bordered-primary.js-submittable.m-r15')
       .click();
 
-    return c.text('Create draft successed!');
+    return 'Create draft succeeded!';
   } finally {
     await browser.close();
   }
-});
+}
 
-export default app;
+const scheduled: ExportedHandlerScheduledHandler<Bindings> = async (event, env, ctx) => {
+  ctx.waitUntil(createDraft(env));
+};
+
+export default {
+  fetch: app.fetch,
+  scheduled,
+};
