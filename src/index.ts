@@ -17,6 +17,8 @@ async function createDraft(env: Bindings) {
     const page = await browser.newPage();
     await page.goto(env.TUNAG_URL);
 
+    console.log('start login');
+
     await page.locator('#user_login_id').fill(env.LOGIN_ID);
     await page.locator('#new_user > div > div.login__scene.js-scene1 > div.column-buttons.m-t30 > input').click();
 
@@ -24,6 +26,8 @@ async function createDraft(env: Bindings) {
     await page
       .locator('#new_user > div > div.login__scene.js-scene2.animated.fadeInRight > div.column-buttons.m-t30 > input')
       .click();
+
+    console.log('start create draft');
 
     const nowDate = new Date().toISOString().split('T')[0].replace(/-/g, '');
     await page.locator('#report_item_date_8307194').fill(nowDate);
@@ -37,6 +41,8 @@ async function createDraft(env: Bindings) {
     await page
       .locator('#edit_report_25239289 > div > input.btn.btn--sub.btn--bordered-primary.js-submittable.m-r15')
       .click();
+
+    console.log('create draft succeeded');
 
     return 'Create draft succeeded!';
   } finally {
