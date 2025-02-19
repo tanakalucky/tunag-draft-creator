@@ -8,7 +8,7 @@
     "binding": "MYBROWSER"
   },
   "triggers": {
-    "crons": ["0 12 * * 1-5"]
+    "crons": ["0 3 * * 2-6"]
   },
   "observability": {
     "enabled": true
