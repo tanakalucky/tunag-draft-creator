@@ -1,4 +1,4 @@
-import puppeteer from '@cloudflare/puppeteer';
+import puppeteer, { type Browser } from '@cloudflare/puppeteer';
 import { Hono } from 'hono';
 
 type Bindings = {
@@ -11,13 +11,13 @@ type Bindings = {
 const app = new Hono<{ Bindings: Bindings }>();
 
 async function createDraft(env: Bindings) {
-  const browser = await puppeteer.launch(env.MYBROWSER);
+  console.log('start create draft');
+  let browser: Browser | null = null;
 
   try {
+    browser = await puppeteer.launch(env.MYBROWSER);
     const page = await browser.newPage();
     await page.goto(env.TUNAG_URL);
-
-    console.log('start login');
 
     await page.locator('#user_login_id').fill(env.LOGIN_ID);
     await page.locator('#new_user > div > div.login__scene.js-scene1 > div.column-buttons.m-t30 > input').click();
@@ -27,7 +27,7 @@ async function createDraft(env: Bindings) {
       .locator('#new_user > div > div.login__scene.js-scene2.animated.fadeInRight > div.column-buttons.m-t30 > input')
       .click();
 
-    console.log('start create draft');
+    console.log('login succeeded');
 
     const nowDate = new Date().toISOString().split('T')[0].replace(/-/g, '');
     await page.locator('#report_item_date_8307194').fill(nowDate);
@@ -43,10 +43,13 @@ async function createDraft(env: Bindings) {
       .click();
 
     console.log('create draft succeeded');
-
-    return 'Create draft succeeded!';
+  } catch (error) {
+    console.error(error);
   } finally {
-    await browser.close();
+    if (browser) {
+      await browser.close();
+      console.log('browser closed');
+    }
   }
 }
 
