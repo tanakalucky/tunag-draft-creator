@@ -54,7 +54,7 @@ async function createDraft(env: Bindings) {
 }
 
 const scheduled: ExportedHandlerScheduledHandler<Bindings> = async (event, env, ctx) => {
-  ctx.waitUntil(createDraft(env));
+  await createDraft(env);
 };
 
 export default {
