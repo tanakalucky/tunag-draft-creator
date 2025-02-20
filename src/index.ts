@@ -11,6 +11,7 @@ type Bindings = {
 const app = new Hono<{ Bindings: Bindings }>();
 
 async function createDraft(env: Bindings) {
+  console.log('env ', env);
   console.log('start create draft');
   let browser: Browser | null = null;
 
@@ -54,7 +55,9 @@ async function createDraft(env: Bindings) {
 }
 
 const scheduled: ExportedHandlerScheduledHandler<Bindings> = async (event, env, ctx) => {
+  console.log('scheduled start');
   await createDraft(env);
+  console.log('scheduled end');
 };
 
 export default {
