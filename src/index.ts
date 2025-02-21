@@ -56,6 +56,9 @@ async function createDraft(env: Bindings) {
 
 const scheduled: ExportedHandlerScheduledHandler<Bindings> = async (event, env, ctx) => {
   console.log('scheduled start');
+  console.log('event ', event);
+  console.log('env ', env);
+  console.log('ctx ', ctx);
   await createDraft(env);
   console.log('scheduled end');
 };
